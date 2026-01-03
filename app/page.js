@@ -39,90 +39,87 @@ export default function Home() {
       </div>
 
       {/* Header */}
-      <header className="py-6 px-4">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
+      <header className="py-4 sm:py-6 px-4">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex items-center space-x-2 text-white">
             <QrCode className="h-8 w-8" />
             <span className="font-bold text-xl">QRAMS</span>
           </div>
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2 sm:space-x-3">
             <Link
               href="/student/login"
-              className="px-6 py-2 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600 transition-colors"
+              className="px-4 sm:px-6 py-2 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600 transition-colors text-sm sm:text-base"
             >
-              Student Login
+              Student
             </Link>
             <Link
               href="/login"
-              className="px-6 py-2 bg-white text-blue-800 rounded-lg font-medium hover:bg-blue-50 transition-colors"
+              className="px-4 sm:px-6 py-2 bg-white text-blue-800 rounded-lg font-medium hover:bg-blue-50 transition-colors text-sm sm:text-base"
             >
-              Admin Login
+              Admin
             </Link>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <main className="max-w-7xl mx-auto px-4 py-16">
-        <div className="text-center text-white mb-16">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">
+      <main className="max-w-7xl mx-auto px-4 py-8 sm:py-16">
+        <div className="text-center text-white mb-8 sm:mb-16">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
             QR Code-Based Attendance System
           </h1>
-          <p className="text-xl md:text-2xl text-blue-200 mb-4">
+          <p className="text-lg sm:text-xl md:text-2xl text-blue-200 mb-3 sm:mb-4">
             Event Sign-In and Sign-Out for Students
           </p>
-          <p className="text-lg text-blue-300">
+          <p className="text-base sm:text-lg text-blue-300">
             Rizal Memorial Institute of Dapitan City, Inc.
           </p>
-          <p className="text-blue-400 mt-2">School Year 2025-2026</p>
+          <p className="text-blue-400 mt-2 text-sm sm:text-base">School Year 2025-2026</p>
         </div>
 
         {/* Features */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-white">
-            <QrCode className="h-12 w-12 mb-4 text-blue-300" />
-            <h3 className="text-lg font-semibold mb-2">QR Code Scanning</h3>
-            <p className="text-blue-200 text-sm">
-              Fast and accurate attendance tracking using QR codes
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-8 sm:mb-16">
+          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 text-white">
+            <QrCode className="h-8 w-8 sm:h-12 sm:w-12 mb-2 sm:mb-4 text-blue-300" />
+            <h3 className="text-sm sm:text-lg font-semibold mb-1 sm:mb-2">QR Scanning</h3>
+            <p className="text-blue-200 text-xs sm:text-sm hidden sm:block">
+              Fast and accurate attendance tracking
             </p>
           </div>
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-white">
-            <Users className="h-12 w-12 mb-4 text-blue-300" />
-            <h3 className="text-lg font-semibold mb-2">Student Management</h3>
-            <p className="text-blue-200 text-sm">
-              Register and manage student records efficiently
+          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 text-white">
+            <Users className="h-8 w-8 sm:h-12 sm:w-12 mb-2 sm:mb-4 text-blue-300" />
+            <h3 className="text-sm sm:text-lg font-semibold mb-1 sm:mb-2">Students</h3>
+            <p className="text-blue-200 text-xs sm:text-sm hidden sm:block">
+              Register and manage student records
             </p>
           </div>
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-white">
-            <Calendar className="h-12 w-12 mb-4 text-blue-300" />
-            <h3 className="text-lg font-semibold mb-2">Event Management</h3>
-            <p className="text-blue-200 text-sm">
-              Create and manage school events with ease
+          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 text-white">
+            <Calendar className="h-8 w-8 sm:h-12 sm:w-12 mb-2 sm:mb-4 text-blue-300" />
+            <h3 className="text-sm sm:text-lg font-semibold mb-1 sm:mb-2">Events</h3>
+            <p className="text-blue-200 text-xs sm:text-sm hidden sm:block">
+              Create and manage school events
             </p>
           </div>
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-white">
-            <ClipboardCheck className="h-12 w-12 mb-4 text-blue-300" />
-            <h3 className="text-lg font-semibold mb-2">Real-time Reports</h3>
-            <p className="text-blue-200 text-sm">
-              Monitor attendance and generate reports instantly
+          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 text-white">
+            <ClipboardCheck className="h-8 w-8 sm:h-12 sm:w-12 mb-2 sm:mb-4 text-blue-300" />
+            <h3 className="text-sm sm:text-lg font-semibold mb-1 sm:mb-2">Reports</h3>
+            <p className="text-blue-200 text-xs sm:text-sm hidden sm:block">
+              Monitor attendance in real-time
             </p>
           </div>
         </div>
 
         {/* CTA for Students */}
-        <div className="text-center space-y-4">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              href="/scan"
-              className="inline-flex items-center space-x-2 px-8 py-4 bg-white text-blue-800 rounded-xl font-bold text-lg hover:bg-blue-50 transition-colors shadow-lg"
-            >
-              <QrCode className="h-6 w-6" />
-              <span>Scan QR Code to Attend</span>
-            </Link>
-            
-          </div>
-          <p className="text-blue-300 text-sm">
-            Scan QR codes to record attendance or login to view your attendance history
+        <div className="text-center space-y-3 sm:space-y-4">
+          <Link
+            href="/scan"
+            className="inline-flex items-center space-x-2 px-6 sm:px-8 py-3 sm:py-4 bg-white text-blue-800 rounded-xl font-bold text-base sm:text-lg hover:bg-blue-50 transition-colors shadow-lg"
+          >
+            <QrCode className="h-5 w-5 sm:h-6 sm:w-6" />
+            <span>Scan QR Code</span>
+          </Link>
+          <p className="text-blue-300 text-xs sm:text-sm px-4">
+            Scan QR codes to record attendance
           </p>
         </div>
       </main>
