@@ -1,0 +1,57 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function to check if user is admin
+    function isAdmin() {
+      return isAuthenticated() && request.auth.token.email != null;
+    }
+    
+    // Students collection
+    match /students/{studentId} {
+      // Anyone can read students (for attendance validation)
+      allow read: if true;
+      // Only authenticated admins can write
+      allow create, update, delete: if isAdmin();
+    }
+    
+    // Events collection
+    match /events/{eventId} {
+      // Anyone can read events (for QR code scanning)
+      allow read: if true;
+      // Only authenticated admins can write
+      allow create, update, delete: if isAdmin();
+    }
+    
+    // Attendance collection
+    match /attendance/{attendanceId} {
+      // Anyone can read attendance
+      allow read: if true;
+      // Anyone can create attendance (students scanning QR codes)
+      allow create: if true;
+      // Only admins can update or delete
+      allow update, delete: if isAdmin();
+    }
+  }
+}
+
+/*
+ * REQUIRED FIRESTORE INDEXES
+ * ==========================
+ * Create these composite indexes in Firebase Console:
+ * 
+ * 1. Attendance by Event (for getEventAttendance)
+ *    Collection: attendance
+ *    Fields: eventId (Ascending), timestamp (Descending)
+ * 
+ * 2. Attendance by Student (for getStudentAttendance)
+ *    Collection: attendance
+ *    Fields: studentId (Ascending), timestamp (Descending)
+ * 
+ * Or click the link in the console error to auto-create the index.
+ */

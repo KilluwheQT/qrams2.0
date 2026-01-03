@@ -24,3 +24,141 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Animated Background */
+.animated-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.animated-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(139, 92, 246, 0.2) 0%, transparent 40%);
+  animation: pulse-bg 8s ease-in-out infinite;
+  z-index: 0;
+}
+
+.animated-bg > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes pulse-bg {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+/* Floating QR Squares Animation */
+.floating-squares {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.floating-squares span {
+  position: absolute;
+  display: block;
+  width: 20px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  animation: float-up 15s linear infinite;
+  bottom: -50px;
+}
+
+.floating-squares span:nth-child(1) {
+  left: 10%;
+  width: 30px;
+  height: 30px;
+  animation-delay: 0s;
+  animation-duration: 12s;
+}
+
+.floating-squares span:nth-child(2) {
+  left: 20%;
+  width: 15px;
+  height: 15px;
+  animation-delay: 2s;
+  animation-duration: 18s;
+}
+
+.floating-squares span:nth-child(3) {
+  left: 35%;
+  width: 25px;
+  height: 25px;
+  animation-delay: 4s;
+  animation-duration: 14s;
+}
+
+.floating-squares span:nth-child(4) {
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  animation-delay: 0s;
+  animation-duration: 20s;
+}
+
+.floating-squares span:nth-child(5) {
+  left: 65%;
+  width: 35px;
+  height: 35px;
+  animation-delay: 3s;
+  animation-duration: 16s;
+}
+
+.floating-squares span:nth-child(6) {
+  left: 75%;
+  width: 18px;
+  height: 18px;
+  animation-delay: 6s;
+  animation-duration: 13s;
+}
+
+.floating-squares span:nth-child(7) {
+  left: 85%;
+  width: 28px;
+  height: 28px;
+  animation-delay: 8s;
+  animation-duration: 17s;
+}
+
+.floating-squares span:nth-child(8) {
+  left: 5%;
+  width: 22px;
+  height: 22px;
+  animation-delay: 10s;
+  animation-duration: 19s;
+}
+
+@keyframes float-up {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-120vh) rotate(720deg);
+    opacity: 0;
+  }
+}
