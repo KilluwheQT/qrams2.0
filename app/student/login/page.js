@@ -109,7 +109,7 @@ function StudentLoginForm() {
                   onChange={(e) => setStudentId(e.target.value)}
                   required
                   placeholder="e.g., 2025-00001"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-lg"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-lg text-gray-900 bg-white"
                   autoFocus
                 />
               </div>
