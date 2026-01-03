@@ -6,7 +6,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import Navbar from '@/components/Navbar';
 import { getAllStudents, getAllEvents, getAttendanceSummary } from '@/lib/firestore';
 import { Users, Calendar, QrCode, ClipboardCheck, TrendingUp, Clock } from 'lucide-react';
-import QRLoader from '@/components/QRLoader';
 import Link from 'next/link';
 
 export default function DashboardPage() {
@@ -66,7 +65,11 @@ export default function DashboardPage() {
   };
 
   if (authLoading || !user) {
-    return <QRLoader text="Loading Dashboard..." />;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
   }
 
   return (

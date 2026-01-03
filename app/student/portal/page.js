@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getStudentAttendance, getEventById, timestampToDate, formatDateTime } from '@/lib/firestore';
 import { QrCode, User, Calendar, LogOut, ClipboardList, CheckCircle, XCircle, Clock } from 'lucide-react';
-import QRLoader from '@/components/QRLoader';
 import Link from 'next/link';
 
 export default function StudentPortalPage() {
@@ -91,7 +90,11 @@ export default function StudentPortalPage() {
   };
 
   if (!student || loading) {
-    return <QRLoader text="Loading Portal..." />;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+      </div>
+    );
   }
 
   return (

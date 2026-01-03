@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { QrCode, Mail, Lock, Eye, EyeOff } from 'lucide-react';
-import QRLoader from '@/components/QRLoader';
 import Link from 'next/link';
 
 export default function LoginPage() {
@@ -39,7 +38,11 @@ export default function LoginPage() {
   };
 
   if (authLoading) {
-    return <QRLoader text="Loading..." />;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
   }
 
   return (
