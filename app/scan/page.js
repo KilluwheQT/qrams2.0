@@ -4,8 +4,38 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Html5Qrcode } from 'html5-qrcode';
 import { getEventById, recordAttendance } from '@/lib/firestore';
-import { QrCode, Camera, CheckCircle, XCircle, ArrowLeft, User, LogOut } from 'lucide-react';
+import { QrCode, Camera, CheckCircle, XCircle, ArrowLeft, User, LogOut, Shield, AlertTriangle } from 'lucide-react';
 import Link from 'next/link';
+
+// QR code validity window in seconds (must match generator)
+const QR_VALIDITY_SECONDS = 30;
+
+// Validate time-based token from QR code
+function validateQRToken(token, ts) {
+  if (!token || !ts) return { valid: false, reason: 'Missing security token' };
+  
+  const now = Math.floor(Date.now() / 1000);
+  const qrTime = Math.floor(ts / 1000);
+  
+  // Check if QR code is too old (more than 2 validity windows)
+  const maxAge = QR_VALIDITY_SECONDS * 2;
+  if (now - qrTime > maxAge) {
+    return { valid: false, reason: 'QR code has expired. Please scan a fresh code.' };
+  }
+  
+  // Validate the time-based token
+  const currentSlot = Math.floor(now / QR_VALIDITY_SECONDS);
+  const previousSlot = currentSlot - 1;
+  const expectedCurrentToken = currentSlot.toString(36);
+  const expectedPreviousToken = previousSlot.toString(36);
+  
+  // Accept current or previous time slot (grace period)
+  if (token === expectedCurrentToken || token === expectedPreviousToken) {
+    return { valid: true };
+  }
+  
+  return { valid: false, reason: 'QR code has expired. Please scan a fresh code.' };
+}
 
 export default function ScanPage() {
   const router = useRouter();
@@ -73,6 +103,13 @@ export default function ScanPage() {
               
               if (!data.eventId || !data.type) {
                 throw new Error('Invalid QR code');
+              }
+
+              // Validate time-based token (security check)
+              const tokenValidation = validateQRToken(data.token, data.ts);
+              if (!tokenValidation.valid) {
+                setError(tokenValidation.reason);
+                return; // Don't stop scanner, let user try again
               }
 
               // Fetch event details
