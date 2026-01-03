@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { getStudentByStudentId } from '@/lib/firestore';
 import { QrCode, User, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
-export default function StudentLoginPage() {
+function StudentLoginForm() {
   const [studentId, setStudentId] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -141,5 +141,17 @@ export default function StudentLoginPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function StudentLoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-900 via-green-800 to-green-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+      </div>
+    }>
+      <StudentLoginForm />
+    </Suspense>
   );
 }
