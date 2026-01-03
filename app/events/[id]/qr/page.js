@@ -100,19 +100,19 @@ export default function EventQRPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div>
               <p className="text-gray-500">Date</p>
-              <p className="font-medium">{event.eventDate}</p>
+              <p className="font-medium text-gray-900">{event.eventDate}</p>
             </div>
             <div>
               <p className="text-gray-500">Venue</p>
-              <p className="font-medium">{event.venue}</p>
+              <p className="font-medium text-gray-900">{event.venue}</p>
             </div>
             <div>
               <p className="text-gray-500">Sign-In Time</p>
-              <p className="font-medium">{event.signInStart} - {event.signInEnd}</p>
+              <p className="font-medium text-gray-900">{event.signInStart} - {event.signInEnd}</p>
             </div>
             <div>
               <p className="text-gray-500">Sign-Out Time</p>
-              <p className="font-medium">{event.signOutStart} - {event.signOutEnd}</p>
+              <p className="font-medium text-gray-900">{event.signOutStart} - {event.signOutEnd}</p>
             </div>
           </div>
         </div>
