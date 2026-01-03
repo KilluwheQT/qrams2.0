@@ -6,7 +6,7 @@ import { Download, RefreshCw, Shield } from 'lucide-react';
 
 // QR code validity window in seconds (must match scanner validation)
 const QR_VALIDITY_SECONDS = 30;
-const REFRESH_INTERVAL_MS = 10000; // Refresh every 10 seconds
+const REFRESH_INTERVAL_MS = 30000; // Refresh every 30 seconds
 
 // Generate a time-based token that changes every QR_VALIDITY_SECONDS
 function generateTimeToken() {
