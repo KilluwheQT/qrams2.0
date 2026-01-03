@@ -7,6 +7,7 @@ import Navbar from '@/components/Navbar';
 import AttendanceTable from '@/components/AttendanceTable';
 import { getAllEvents, getAttendanceSummary } from '@/lib/firestore';
 import { ClipboardList, Calendar, Download } from 'lucide-react';
+import QRLoader, { QRLoaderFullPage } from '@/components/QRLoader';
 
 export default function AttendancePage() {
   const { user, loading: authLoading } = useAuth();
@@ -64,11 +65,7 @@ export default function AttendancePage() {
   };
 
   if (authLoading || !user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
+    return <QRLoaderFullPage message="Loading attendance..." />;
   }
 
   return (
@@ -107,7 +104,7 @@ export default function AttendancePage() {
         {/* Loading State */}
         {loading || loadingSummary ? (
           <div className="flex justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <QRLoader size="md" />
           </div>
         ) : !selectedEvent ? (
           <div className="bg-white rounded-xl shadow-md p-12 text-center">

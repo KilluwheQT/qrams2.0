@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import Navbar from '@/components/Navbar';
 import { getAllStudents, deleteStudent } from '@/lib/firestore';
 import { Users, Plus, Search, Edit, Trash2, Eye } from 'lucide-react';
+import QRLoader, { QRLoaderFullPage } from '@/components/QRLoader';
 import Link from 'next/link';
 
 export default function StudentsPage() {
@@ -57,11 +58,7 @@ export default function StudentsPage() {
   );
 
   if (authLoading || !user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
+    return <QRLoaderFullPage message="Loading students..." />;
   }
 
   return (
@@ -102,7 +99,7 @@ export default function StudentsPage() {
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
           {loading ? (
             <div className="flex justify-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+              <QRLoader size="md" />
             </div>
           ) : filteredStudents.length === 0 ? (
             <div className="text-center py-12">

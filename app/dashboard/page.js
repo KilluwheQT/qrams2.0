@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import Navbar from '@/components/Navbar';
 import { getAllStudents, getAllEvents, getAttendanceSummary } from '@/lib/firestore';
 import { Users, Calendar, QrCode, ClipboardCheck, TrendingUp, Clock } from 'lucide-react';
+import QRLoader, { QRLoaderFullPage } from '@/components/QRLoader';
 import Link from 'next/link';
 
 export default function DashboardPage() {
@@ -65,11 +66,7 @@ export default function DashboardPage() {
   };
 
   if (authLoading || !user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
+    return <QRLoaderFullPage message="Loading dashboard..." />;
   }
 
   return (
@@ -190,7 +187,7 @@ export default function DashboardPage() {
             <h2 className="text-xl font-semibold text-gray-800 mb-4">Recent Events</h2>
             {loading ? (
               <div className="flex justify-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <QRLoader size="md" />
               </div>
             ) : recentEvents.length === 0 ? (
               <div className="text-center py-8 text-gray-500">

@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import Navbar from '@/components/Navbar';
 import { getAllEvents, deleteEvent } from '@/lib/firestore';
 import { Calendar, Plus, Search, Edit, Trash2, Eye, QrCode } from 'lucide-react';
+import QRLoader, { QRLoaderFullPage } from '@/components/QRLoader';
 import Link from 'next/link';
 
 export default function EventsPage() {
@@ -69,11 +70,7 @@ export default function EventsPage() {
   });
 
   if (authLoading || !user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
+    return <QRLoaderFullPage message="Loading events..." />;
   }
 
   return (
@@ -126,7 +123,7 @@ export default function EventsPage() {
         {/* Events Grid */}
         {loading ? (
           <div className="flex justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <QRLoader size="md" />
           </div>
         ) : filteredEvents.length === 0 ? (
           <div className="bg-white rounded-xl shadow-md p-12 text-center">
