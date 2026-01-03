@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { getStudentByStudentId } from '@/lib/firestore';
 import { QrCode, User, ArrowLeft } from 'lucide-react';
+import QRLoader from '@/components/QRLoader';
 import Link from 'next/link';
 
 function StudentLoginForm() {
@@ -147,8 +148,9 @@ function StudentLoginForm() {
 export default function StudentLoginPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-900 via-green-800 to-green-900">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-green-900 via-green-800 to-green-900">
+        <QRLoader size="lg" />
+        <p className="mt-4 text-white text-sm">Loading...</p>
       </div>
     }>
       <StudentLoginForm />

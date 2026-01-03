@@ -7,6 +7,7 @@ import Navbar from '@/components/Navbar';
 import AttendanceTable from '@/components/AttendanceTable';
 import { getEventById, getAttendanceSummary } from '@/lib/firestore';
 import { ArrowLeft, Calendar, MapPin, Clock, Users, QrCode, Edit } from 'lucide-react';
+import { QRLoaderFullPage } from '@/components/QRLoader';
 import Link from 'next/link';
 
 export default function EventDetailPage() {
@@ -58,11 +59,7 @@ export default function EventDetailPage() {
   };
 
   if (authLoading || !user || loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
+    return <QRLoaderFullPage message="Loading event..." />;
   }
 
   if (!event) {

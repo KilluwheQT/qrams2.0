@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Html5Qrcode } from 'html5-qrcode';
 import { getEventById, recordAttendance } from '@/lib/firestore';
 import { QrCode, Camera, CheckCircle, XCircle, ArrowLeft, User, LogOut, Shield, AlertTriangle } from 'lucide-react';
+import QRLoader from '@/components/QRLoader';
 import Link from 'next/link';
 
 // QR code validity window in seconds (must match generator)
@@ -234,8 +235,9 @@ export default function ScanPage() {
   // Show loading while checking session
   if (step === 'checking') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900">
+        <QRLoader size="lg" />
+        <p className="mt-4 text-white text-sm">Loading...</p>
       </div>
     );
   }
@@ -397,7 +399,9 @@ export default function ScanPage() {
         {/* Processing Step */}
         {step === 'processing' && (
           <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <div className="flex justify-center mb-4">
+              <QRLoader size="lg" />
+            </div>
             <p className="text-gray-600">Processing your attendance...</p>
           </div>
         )}
