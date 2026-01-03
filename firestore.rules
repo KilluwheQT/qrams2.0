@@ -16,8 +16,12 @@ service cloud.firestore {
     match /students/{studentId} {
       // Anyone can read students (for attendance validation)
       allow read: if true;
-      // Only authenticated admins can write
-      allow create, update, delete: if isAdmin();
+      // Only authenticated admins can create or delete
+      allow create, delete: if isAdmin();
+      // Allow updates for admins OR for students updating only allowed fields
+      allow update: if isAdmin() || 
+        (request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['course', 'yearLevel', 'section', 'updatedAt']));
     }
     
     // Events collection

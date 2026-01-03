@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getStudentAttendance, getEventById, timestampToDate, formatDateTime } from '@/lib/firestore';
-import { QrCode, User, Calendar, LogOut, ClipboardList, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { QrCode, User, Calendar, LogOut, ClipboardList, CheckCircle, XCircle, Clock, Edit } from 'lucide-react';
 import QRLoader from '@/components/QRLoader';
 import Link from 'next/link';
 
@@ -23,14 +23,14 @@ export default function StudentPortalPage() {
   useEffect(() => {
     const session = sessionStorage.getItem('studentSession');
     if (!session) {
-      router.push('/student/login');
+      router.replace('/student/login');
       return;
     }
 
     const studentData = JSON.parse(session);
     setStudent(studentData);
     loadAttendance(studentData.studentId);
-  }, [router]);
+  }, []);
 
   const loadAttendance = async (studentId) => {
     try {
@@ -148,13 +148,22 @@ export default function StudentPortalPage() {
             <div className="flex sm:hidden text-sm text-gray-600 -mt-2">
               <p>{student.course} • {student.yearLevel} - {student.section}</p>
             </div>
-            <Link
-              href="/scan"
-              className="flex items-center justify-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors w-full sm:w-auto"
-            >
-              <QrCode className="h-5 w-5" />
-              <span>Scan QR</span>
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+              <Link
+                href="/student/profile/edit"
+                className="flex items-center justify-center space-x-2 px-4 py-2 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors"
+              >
+                <Edit className="h-5 w-5" />
+                <span>Edit Profile</span>
+              </Link>
+              <Link
+                href="/scan"
+                className="flex items-center justify-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              >
+                <QrCode className="h-5 w-5" />
+                <span>Scan QR</span>
+              </Link>
+            </div>
           </div>
         </div>
 
