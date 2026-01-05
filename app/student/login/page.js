@@ -35,14 +35,19 @@ function StudentLoginForm() {
         throw new Error('Student ID not found. Please check your ID and try again.');
       }
 
+      // Check if student is approved
+      if (student.status === 'pending') {
+        throw new Error('Your registration is pending approval. Please wait for an administrator to approve your account.');
+      }
+
       // Store student info in sessionStorage for the portal
       sessionStorage.setItem('studentSession', JSON.stringify({
         id: student.id,
         studentId: student.studentId,
         firstName: student.firstName,
         lastName: student.lastName,
-        course: student.course,
-        yearLevel: student.yearLevel,
+        gradeLevel: student.gradeLevel,
+        strand: student.strand,
         section: student.section
       }));
 
@@ -126,13 +131,19 @@ function StudentLoginForm() {
           </form>
 
           <div className="mt-6 text-center space-y-2">
-            <Link href="/scan" className="block text-sm text-green-600 hover:text-green-800">
-              Scan QR Code for Attendance →
+            <p className="text-sm text-gray-500">
+              Don't have an account?
+            </p>
+            <Link href="/student/register" className="block text-sm text-green-600 hover:text-green-800 font-medium">
+              Register here
             </Link>
-            <Link href="/" className="flex items-center justify-center text-sm text-gray-500 hover:text-gray-700">
-              <ArrowLeft className="h-4 w-4 mr-1" />
-              Back to Home
-            </Link>
+            <div className="pt-2 space-y-2">
+             
+              <Link href="/" className="flex items-center justify-center text-sm text-gray-500 hover:text-gray-700">
+                <ArrowLeft className="h-4 w-4 mr-1" />
+                Back to Home
+              </Link>
+            </div>
           </div>
         </div>
 

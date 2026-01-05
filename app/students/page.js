@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Navbar from '@/components/Navbar';
-import { getAllStudents, deleteStudent } from '@/lib/firestore';
-import { Users, Plus, Search, Edit, Trash2, Eye } from 'lucide-react';
+import { getAllStudents, deleteStudent, getPendingStudentsCount } from '@/lib/firestore';
+import { Users, Plus, Search, Edit, Trash2, Eye, UserCheck } from 'lucide-react';
 import QRLoader, { QRLoaderFullPage } from '@/components/QRLoader';
 import Link from 'next/link';
 
@@ -16,6 +16,7 @@ export default function StudentsPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [pendingCount, setPendingCount] = useState(0);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -31,8 +32,12 @@ export default function StudentsPage() {
 
   const loadStudents = async () => {
     try {
-      const data = await getAllStudents();
+      const [data, pending] = await Promise.all([
+        getAllStudents(),
+        getPendingStudentsCount()
+      ]);
       setStudents(data);
+      setPendingCount(pending);
     } catch (error) {
       console.error('Error loading students:', error);
     } finally {
@@ -54,7 +59,8 @@ export default function StudentsPage() {
     student.studentId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     student.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     student.lastName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    student.course?.toLowerCase().includes(searchTerm.toLowerCase())
+    student.gradeLevel?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    student.strand?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (authLoading || !user) {
@@ -72,13 +78,27 @@ export default function StudentsPage() {
             <h1 className="text-3xl font-bold text-gray-800">Students</h1>
             <p className="text-gray-600 mt-1">Manage student records</p>
           </div>
-          <Link
-            href="/students/new"
-            className="mt-4 md:mt-0 inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            <Plus className="h-5 w-5" />
-            <span>Add Student</span>
-          </Link>
+          <div className="mt-4 md:mt-0 flex items-center space-x-3">
+            <Link
+              href="/students/pending"
+              className="relative inline-flex items-center space-x-2 px-4 py-2 border border-yellow-500 text-yellow-600 rounded-lg hover:bg-yellow-50 transition-colors"
+            >
+              <UserCheck className="h-5 w-5" />
+              <span>Pending</span>
+              {pendingCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                  {pendingCount}
+                </span>
+              )}
+            </Link>
+            <Link
+              href="/students/new"
+              className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              <Plus className="h-5 w-5" />
+              <span>Add Student</span>
+            </Link>
+          </div>
         </div>
 
         {/* Search */}
@@ -87,7 +107,7 @@ export default function StudentsPage() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
             <input
               type="text"
-              placeholder="Search by name, ID, or course..."
+              placeholder="Search by name, ID, grade level, or strand..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -125,10 +145,10 @@ export default function StudentsPage() {
                       Name
                     </th>
                     <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Course
+                      Grade Level
                     </th>
                     <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Year / Section
+                      Strand / Section
                     </th>
                     <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Actions
@@ -145,10 +165,10 @@ export default function StudentsPage() {
                         {student.lastName}, {student.firstName} {student.middleName || ''}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-500">
-                        {student.course}
+                        {student.gradeLevel}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-500">
-                        {student.yearLevel} - {student.section}
+                        {student.strand ? `${student.strand} - ${student.section}` : student.section}
                       </td>
                       <td className="px-4 py-3 text-sm">
                         <div className="flex items-center space-x-2">

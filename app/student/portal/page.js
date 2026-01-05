@@ -141,12 +141,12 @@ export default function StudentPortalPage() {
               </h1>
               <p className="text-gray-500">{student.studentId}</p>
               <div className="mt-2 text-sm text-gray-600">
-                <p>{student.course}</p>
-                <p>{student.yearLevel} - Section {student.section}</p>
+                <p>{student.gradeLevel}{student.strand ? ` - ${student.strand}` : ''}</p>
+                <p>Section {student.section}</p>
               </div>
             </div>
             <div className="flex sm:hidden text-sm text-gray-600 -mt-2">
-              <p>{student.course} • {student.yearLevel} - {student.section}</p>
+              <p>{student.gradeLevel}{student.strand ? ` - ${student.strand}` : ''} • Section {student.section}</p>
             </div>
             <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
               <Link

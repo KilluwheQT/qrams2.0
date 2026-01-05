@@ -3,18 +3,11 @@
 import { useState } from 'react';
 import { Save, X } from 'lucide-react';
 
-const COURSES = [
-  'Bachelor of Science in Information Technology',
-  'Bachelor of Science in Computer Science',
-  'Bachelor of Science in Business Administration',
-  'Bachelor of Science in Accountancy',
-  'Bachelor of Science in Education',
-  'Bachelor of Arts in Communication',
-  'Bachelor of Science in Nursing',
-  'Bachelor of Science in Criminology'
-];
+const STRANDS = ['STEM', 'ABM', 'HUMSS'];
 
-const YEAR_LEVELS = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
+const GRADE_LEVELS = ['Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12'];
+
+const isSeniorHigh = (gradeLevel) => gradeLevel === 'Grade 11' || gradeLevel === 'Grade 12';
 
 export default function StudentForm({ student, onSubmit, onCancel }) {
   const [formData, setFormData] = useState({
@@ -23,8 +16,8 @@ export default function StudentForm({ student, onSubmit, onCancel }) {
     lastName: student?.lastName || '',
     middleName: student?.middleName || '',
     email: student?.email || '',
-    course: student?.course || COURSES[0],
-    yearLevel: student?.yearLevel || YEAR_LEVELS[0],
+    gradeLevel: student?.gradeLevel || GRADE_LEVELS[0],
+    strand: student?.strand || '',
     section: student?.section || ''
   });
   const [loading, setLoading] = useState(false);
@@ -32,7 +25,18 @@ export default function StudentForm({ student, onSubmit, onCancel }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData(prev => {
+      const newData = { ...prev, [name]: value };
+      // Clear strand if switching to junior high
+      if (name === 'gradeLevel' && !isSeniorHigh(value)) {
+        newData.strand = '';
+      }
+      // Set default strand if switching to senior high and no strand selected
+      if (name === 'gradeLevel' && isSeniorHigh(value) && !prev.strand) {
+        newData.strand = STRANDS[0];
+      }
+      return newData;
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -131,37 +135,39 @@ export default function StudentForm({ student, onSubmit, onCancel }) {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Course *
+            Grade Level *
           </label>
           <select
-            name="course"
-            value={formData.course}
+            name="gradeLevel"
+            value={formData.gradeLevel}
             onChange={handleChange}
             required
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
-            {COURSES.map(course => (
-              <option key={course} value={course}>{course}</option>
+            {GRADE_LEVELS.map(grade => (
+              <option key={grade} value={grade}>{grade}</option>
             ))}
           </select>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Year Level *
-          </label>
-          <select
-            name="yearLevel"
-            value={formData.yearLevel}
-            onChange={handleChange}
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          >
-            {YEAR_LEVELS.map(year => (
-              <option key={year} value={year}>{year}</option>
-            ))}
-          </select>
-        </div>
+        {isSeniorHigh(formData.gradeLevel) && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Strand *
+            </label>
+            <select
+              name="strand"
+              value={formData.strand}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              {STRANDS.map(strand => (
+                <option key={strand} value={strand}>{strand}</option>
+              ))}
+            </select>
+          </div>
+        )}
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">

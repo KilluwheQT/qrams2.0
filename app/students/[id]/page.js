@@ -105,17 +105,19 @@ export default function StudentDetailPage() {
             <div className="flex items-center space-x-3">
               <BookOpen className="h-5 w-5 text-gray-400" />
               <div>
-                <p className="text-sm text-gray-500">Course</p>
-                <p className="text-gray-800">{student.course}</p>
+                <p className="text-sm text-gray-500">Grade Level</p>
+                <p className="text-gray-800">{student.gradeLevel}</p>
               </div>
             </div>
-            <div className="flex items-center space-x-3">
-              <Calendar className="h-5 w-5 text-gray-400" />
-              <div>
-                <p className="text-sm text-gray-500">Year Level</p>
-                <p className="text-gray-800">{student.yearLevel}</p>
+            {student.strand && (
+              <div className="flex items-center space-x-3">
+                <Calendar className="h-5 w-5 text-gray-400" />
+                <div>
+                  <p className="text-sm text-gray-500">Strand</p>
+                  <p className="text-gray-800">{student.strand}</p>
+                </div>
               </div>
-            </div>
+            )}
             <div className="flex items-center space-x-3">
               <User className="h-5 w-5 text-gray-400" />
               <div>

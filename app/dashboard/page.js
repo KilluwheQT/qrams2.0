@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Navbar from '@/components/Navbar';
-import { getAllStudents, getAllEvents, getAttendanceSummary } from '@/lib/firestore';
-import { Users, Calendar, QrCode, ClipboardCheck, TrendingUp, Clock } from 'lucide-react';
+import { getAllStudents, getAllEvents, getAttendanceSummary, getPendingStudentsCount } from '@/lib/firestore';
+import { Users, Calendar, QrCode, ClipboardCheck, TrendingUp, Clock, UserCheck } from 'lucide-react';
 import QRLoader, { QRLoaderFullPage } from '@/components/QRLoader';
 import Link from 'next/link';
 
@@ -16,7 +16,8 @@ export default function DashboardPage() {
     totalStudents: 0,
     totalEvents: 0,
     upcomingEvents: 0,
-    todayAttendance: 0
+    todayAttendance: 0,
+    pendingRegistrations: 0
   });
   const [recentEvents, setRecentEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -35,9 +36,10 @@ export default function DashboardPage() {
 
   const loadDashboardData = async () => {
     try {
-      const [students, events] = await Promise.all([
+      const [students, events, pendingCount] = await Promise.all([
         getAllStudents(),
-        getAllEvents()
+        getAllEvents(),
+        getPendingStudentsCount()
       ]);
 
       const today = new Date().toISOString().split('T')[0];
@@ -54,7 +56,8 @@ export default function DashboardPage() {
         totalStudents: students.length,
         totalEvents: events.length,
         upcomingEvents: upcomingEvents.length,
-        todayAttendance
+        todayAttendance,
+        pendingRegistrations: pendingCount
       });
 
       setRecentEvents(events.slice(0, 5));
@@ -143,6 +146,23 @@ export default function DashboardPage() {
               View attendance →
             </Link>
           </div>
+
+          {stats.pendingRegistrations > 0 && (
+            <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-orange-500">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-500">Pending Registrations</p>
+                  <p className="text-3xl font-bold text-orange-600">{stats.pendingRegistrations}</p>
+                </div>
+                <div className="p-3 bg-orange-100 rounded-full">
+                  <UserCheck className="h-6 w-6 text-orange-600" />
+                </div>
+              </div>
+              <Link href="/students/pending" className="text-sm text-orange-600 hover:underline mt-4 inline-block">
+                Review registrations →
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* Quick Actions & Recent Events */}

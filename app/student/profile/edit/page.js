@@ -16,10 +16,14 @@ export default function EditStudentProfilePage() {
   const [success, setSuccess] = useState('');
   
   const [formData, setFormData] = useState({
-    course: '',
-    yearLevel: '',
+    gradeLevel: '',
+    strand: '',
     section: ''
   });
+
+  const STRANDS = ['STEM', 'ABM', 'HUMSS'];
+  const GRADE_LEVELS = ['Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12'];
+  const isSeniorHigh = (gradeLevel) => gradeLevel === 'Grade 11' || gradeLevel === 'Grade 12';
 
   useEffect(() => {
     const session = sessionStorage.getItem('studentSession');
@@ -31,8 +35,8 @@ export default function EditStudentProfilePage() {
     const studentData = JSON.parse(session);
     setStudent(studentData);
     setFormData({
-      course: studentData.course || '',
-      yearLevel: studentData.yearLevel || '',
+      gradeLevel: studentData.gradeLevel || '',
+      strand: studentData.strand || '',
       section: studentData.section || ''
     });
     setLoading(false);
@@ -40,10 +44,18 @@ export default function EditStudentProfilePage() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => {
+      const newData = { ...prev, [name]: value };
+      // Clear strand if switching to junior high
+      if (name === 'gradeLevel' && !isSeniorHigh(value)) {
+        newData.strand = '';
+      }
+      // Set default strand if switching to senior high and no strand selected
+      if (name === 'gradeLevel' && isSeniorHigh(value) && !prev.strand) {
+        newData.strand = STRANDS[0];
+      }
+      return newData;
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -62,16 +74,16 @@ export default function EditStudentProfilePage() {
 
       // Update only allowed fields
       await updateStudent(fullStudent.id, {
-        course: formData.course,
-        yearLevel: formData.yearLevel,
+        gradeLevel: formData.gradeLevel,
+        strand: formData.strand,
         section: formData.section
       });
 
       // Update session storage with new data
       const updatedSession = {
         ...student,
-        course: formData.course,
-        yearLevel: formData.yearLevel,
+        gradeLevel: formData.gradeLevel,
+        strand: formData.strand,
         section: formData.section
       };
       sessionStorage.setItem('studentSession', JSON.stringify(updatedSession));
@@ -164,52 +176,45 @@ export default function EditStudentProfilePage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Course */}
+            {/* Grade Level */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Course / Program
+                Grade Level
               </label>
               <select
-                name="course"
-                value={formData.course}
+                name="gradeLevel"
+                value={formData.gradeLevel}
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 bg-white"
               >
-                <option value="">Select Course</option>
-                <option value="BSIT">BSIT - Bachelor of Science in Information Technology</option>
-                <option value="BSCS">BSCS - Bachelor of Science in Computer Science</option>
-                <option value="BSBA">BSBA - Bachelor of Science in Business Administration</option>
-                <option value="BSA">BSA - Bachelor of Science in Accountancy</option>
-                <option value="BSED">BSED - Bachelor of Secondary Education</option>
-                <option value="BEED">BEED - Bachelor of Elementary Education</option>
-                <option value="BSN">BSN - Bachelor of Science in Nursing</option>
-                <option value="BSCRIM">BSCRIM - Bachelor of Science in Criminology</option>
-                <option value="BSHM">BSHM - Bachelor of Science in Hospitality Management</option>
-                <option value="BSTM">BSTM - Bachelor of Science in Tourism Management</option>
+                <option value="">Select Grade Level</option>
+                {GRADE_LEVELS.map(grade => (
+                  <option key={grade} value={grade}>{grade}</option>
+                ))}
               </select>
             </div>
 
-            {/* Year Level */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Year Level
-              </label>
-              <select
-                name="yearLevel"
-                value={formData.yearLevel}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 bg-white"
-              >
-                <option value="">Select Year Level</option>
-                <option value="1st Year">1st Year</option>
-                <option value="2nd Year">2nd Year</option>
-                <option value="3rd Year">3rd Year</option>
-                <option value="4th Year">4th Year</option>
-                <option value="5th Year">5th Year</option>
-              </select>
-            </div>
+            {/* Strand - Only for Senior High */}
+            {isSeniorHigh(formData.gradeLevel) && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Strand
+                </label>
+                <select
+                  name="strand"
+                  value={formData.strand}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 bg-white"
+                >
+                  <option value="">Select Strand</option>
+                  {STRANDS.map(strand => (
+                    <option key={strand} value={strand}>{strand}</option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             {/* Section / Block */}
             <div>

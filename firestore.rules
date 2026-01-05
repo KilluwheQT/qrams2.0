@@ -16,12 +16,14 @@ service cloud.firestore {
     match /students/{studentId} {
       // Anyone can read students (for attendance validation)
       allow read: if true;
-      // Only authenticated admins can create or delete
-      allow create, delete: if isAdmin();
+      // Allow anyone to create students with pending status (for registration)
+      allow create: if request.resource.data.status == 'pending';
+      // Only authenticated admins can delete
+      allow delete: if isAdmin();
       // Allow updates for admins OR for students updating only allowed fields
       allow update: if isAdmin() || 
         (request.resource.data.diff(resource.data).affectedKeys()
-          .hasOnly(['course', 'yearLevel', 'section', 'updatedAt']));
+          .hasOnly(['gradeLevel', 'strand', 'section', 'updatedAt']));
     }
     
     // Events collection
@@ -56,6 +58,10 @@ service cloud.firestore {
  * 2. Attendance by Student (for getStudentAttendance)
  *    Collection: attendance
  *    Fields: studentId (Ascending), timestamp (Descending)
+ * 
+ * 3. Pending Students (for getPendingStudents)
+ *    Collection: students
+ *    Fields: status (Ascending), createdAt (Descending)
  * 
  * Or click the link in the console error to auto-create the index.
  */
